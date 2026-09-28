@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>点石成精 JING · 一块会说话的守护石</title>
+<meta name="description" content="一块雅安河石，经过三道手工，配一枚藏着 NFC 芯片的木牌。手机碰一下，石头里的精醒来，之后每天跟你说一句话。">
+<style>
+  :root{
+    --ink:#1c1b18;
+    --ink-2:#2a2823;
+    --paper:#f4efe4;
+    --paper-2:#ece5d4;
+    --cinnabar:#b03a2e;
+    --stone:#6f7666;
+    --gold:#a08c5b;
+    --mist:#8a8577;
+    --line:rgba(28,27,24,.14);
+    --line-dark:rgba(244,239,228,.16);
+    --serif:"Noto Serif SC","Songti SC","STSong","SimSun",serif;
+    --sans:"PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--serif);
+    line-height:1.8;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  ::selection{background:var(--cinnabar);color:var(--paper)}
+  img{max-width:100%;display:block}
+  a{color:inherit;text-decoration:none}
+
+  /* ---------- 通用 ---------- */
+  .wrap{max-width:1200px;margin:0 auto;padding:0 6vw}
+  section{position:relative}
+  .kicker{
+    font-family:var(--sans);font-size:12px;letter-spacing:.35em;
+    color:var(--cinnabar);text-transform:uppercase;margin-bottom:18px;
+    display:flex;align-items:center;gap:14px;
+  }
+  .kicker::before{content:"";width:34px;height:1px;background:var(--cinnabar)}
+  h2{font-size:clamp(28px,4.2vw,46px);font-weight:700;line-height:1.3;letter-spacing:.04em}
+  h3{font-size:20px;letter-spacing:.06em}
+  .lead{color:var(--mist);max-width:62ch}
+  .dark{background:var(--ink);color:var(--paper)}
+  .dark .lead{color:rgba(244,239,228,.6)}
+  .reveal{opacity:0;transform:translateY(34px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1)}
+  .reveal.in{opacity:1;transform:none}
+  .seal{
+    display:inline-grid;place-items:center;width:64px;height:64px;
+    background:var(--cinnabar);color:var(--paper);
+    font-size:22px;font-weight:700;letter-spacing:.1em;line-height:1.25;
+    border-radius:6px;transform:rotate(-3deg);
+    box-shadow:0 6px 18px rgba(176,58,46,.35);
+    writing-mode:vertical-rl;text-orientation:upright;padding:6px;
+  }
+
+  /* ---------- 导航 ---------- */
+  nav{
+    position:fixed;inset:0 0 auto 0;z-index:50;
+    display:flex;justify-content:space-between;align-items:center;
+    padding:18px 6vw;transition:background .4s,box-shadow .4s;
+  }
+  nav.scrolled{background:rgba(28,27,24,.86);backdrop-filter:blur(12px);box-shadow:0 1px 0 var(--line-dark)}
+  .brand{color:var(--paper);font-size:18px;letter-spacing:.3em;font-weight:700;display:flex;align-items:center;gap:12px}
+  .brand .dot{width:10px;height:10px;border-radius:50%;background:var(--cinnabar);box-shadow:0 0 12px rgba(176,58,46,.8)}
+  .nav-cta{
+    font-family:var(--sans);font-size:13px;letter-spacing:.2em;color:var(--paper);
+    border:1px solid rgba(244,239,228,.4);padding:9px 22px;border-radius:999px;
+    transition:.35s;
+  }
+  .nav-cta:hover{background:var(--cinnabar);border-color:var(--cinnabar)}
+
+  /* ---------- Hero ---------- */
+  .hero{
+    min-height:100dvh;background:var(--ink);color:var(--paper);
+    display:grid;grid-template-columns:1.1fr .9fr;align-items:stretch;overflow:hidden;
+  }
+  .hero-text{padding:20vh 5vw 12vh 6vw;display:flex;flex-direction:column;justify-content:center;position:relative;z-index:2}
+  .hero-eyebrow{font-family:var(--sans);font-size:12px;letter-spacing:.5em;color:rgba(244,239,228,.55);margin-bottom:28px}
+  .hero h1{font-size:clamp(44px,7vw,96px);line-height:1.12;font-weight:900;letter-spacing:.06em}
+  .hero h1 em{font-style:normal;color:var(--cinnabar)}
+  .hero-en{font-family:var(--sans);font-size:13px;letter-spacing:.42em;color:var(--gold);margin:22px 0 30px;text-transform:uppercase}
+  .hero-sub{font-size:clamp(15px,1.4vw,19px);color:rgba(244,239,228,.72);max-width:34em;margin-bottom:44px}
+  .hero-sub b{color:var(--paper);font-weight:700}
+  .hero-actions{display:flex;gap:18px;flex-wrap:wrap;align-items:center}
+  .btn{
+    font-family:var(--sans);letter-spacing:.18em;font-size:14px;
+    padding:16px 38px;border-radius:999px;transition:transform .35s cubic-bezier(.34,1.56,.64,1),box-shadow .35s;
+    display:inline-block;
+  }
+  .btn-primary{background:var(--cinnabar);color:var(--paper);box-shadow:0 10px 30px rgba(176,58,46,.35)}
+  .btn-primary:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 16px 40px rgba(176,58,46,.45)}
+  .btn-ghost{border:1px solid rgba(244,239,228,.35);color:var(--paper)}
+  .btn-ghost:hover{transform:translateY(-3px);border-color:var(--paper)}
+  .price-note{font-family:var(--sans);font-size:12px;letter-spacing:.14em;color:rgba(244,239,228,.45);margin-top:26px}
+  .hero-visual{position:relative;min-height:60vh}
+  .hero-visual img{width:100%;height:100%;object-fit:cover;filter:saturate(.92)}
+  .hero-visual::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,var(--ink) 0%,transparent 34%),linear-gradient(0deg,rgba(28,27,24,.55),transparent 40%)}
+  .hero-tag{
+    position:absolute;right:5vw;bottom:6vh;z-index:3;
+    font-family:var(--sans);font-size:11px;letter-spacing:.3em;color:rgba(244,239,228,.6);
+    writing-mode:vertical-rl;
+  }
+  .hero-marquee{
+    position:absolute;left:0;right:0;bottom:0;z-index:4;overflow:hidden;
+    border-top:1px solid var(--line-dark);background:rgba(28,27,24,.72);backdrop-filter:blur(8px);
+    padding:12px 0;
+  }
+  .marquee-track{display:flex;gap:56px;white-space:nowrap;animation:marquee 36s linear infinite;font-size:13px;letter-spacing:.32em;color:rgba(244,239,228,.55);font-family:var(--sans)}
+  .marquee-track span b{color:var(--cinnabar);font-weight:400}
+  @keyframes marquee{to{transform:translateX(-50%)}}
+  @keyframes floaty{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-10px) rotate(-3deg)}}
+
+  /* ---------- 出身故事 ---------- */
+  .origin{padding:16vh 0;background:var(--paper)}
+  .origin-grid{display:grid;grid-template-columns:1fr 1fr;gap:8vw;align-items:center}
+  .big-num{
+    font-size:clamp(72px,12vw,168px);font-weight:900;line-height:1;letter-spacing:-.02em;
+    color:transparent;-webkit-text-stroke:1.5px rgba(28,27,24,.35);user-select:none;
+  }
+  .big-num b{color:var(--cinnabar);-webkit-text-stroke:0}
+  .origin-quote{
+    margin-top:34px;padding:26px 30px;border-left:3px solid var(--cinnabar);
+    background:var(--paper-2);font-size:17px;
+  }
+  .origin-quote small{display:block;margin-top:12px;font-family:var(--sans);font-size:12px;letter-spacing:.14em;color:var(--mist)}
+
+  /* ---------- 产品构成 ---------- */
+  .compose{padding:14vh 0;background:var(--ink);color:var(--paper)}
+  .compose-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line-dark);border:1px solid var(--line-dark);margin-top:64px}
+  .compose-card{background:var(--ink);padding:52px 38px;transition:background .5s}
+  .compose-card:hover{background:var(--ink-2)}
+  .compose-card .idx{font-family:var(--sans);font-size:12px;letter-spacing:.3em;color:var(--cinnabar);margin-bottom:22px}
+  .compose-card h3{font-size:24px;margin-bottom:16px}
+  .compose-card p{color:rgba(244,239,228,.62);font-size:15px}
+  .compose-foot{margin-top:42px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px}
+  .price-tag{font-size:15px;letter-spacing:.1em;color:rgba(244,239,228,.75)}
+  .price-tag b{font-size:30px;color:var(--paper);margin:0 6px}
+  .price-tag s{color:rgba(244,239,228,.4);font-size:15px}
+
+  /* ---------- 点化流程 ---------- */
+  .awaken{padding:16vh 0;background:var(--paper)}
+  .awaken-grid{display:grid;grid-template-columns:1fr 1fr;gap:6vw;align-items:center}
+  .awaken-visual{position:relative;border-radius:8px;overflow:hidden;box-shadow:0 40px 90px rgba(28,27,24,.28)}
+  .awaken-visual img{transition:transform 1.2s cubic-bezier(.16,1,.3,1)}
+  .awaken-visual:hover img{transform:scale(1.04)}
+  .awaken-visual .cap{
+    position:absolute;left:0;right:0;bottom:0;padding:22px 26px;
+    background:linear-gradient(0deg,rgba(28,27,24,.85),transparent);
+    color:var(--paper);font-family:var(--sans);font-size:12px;letter-spacing:.22em;
+  }
+  .steps{margin-top:44px;counter-reset:step}
+  .step{display:flex;gap:26px;padding:24px 0;border-top:1px solid var(--line)}
+  .step:last-child{border-bottom:1px solid var(--line)}
+  .step::before{
+    counter-increment:step;content:counter(step,decimal-leading-zero);
+    font-family:var(--sans);font-size:13px;letter-spacing:.2em;color:var(--cinnabar);
+    min-width:34px;padding-top:4px;
+  }
+  .step h3{font-size:18px;margin-bottom:6px}
+  .step p{font-size:14.5px;color:var(--mist);max-width:52ch}
+
+  /* ---------- 两个角色 ---------- */
+  .voices{padding:14vh 0;background:var(--ink);color:var(--paper)}
+  .voices-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line-dark);border:1px solid var(--line-dark);margin-top:60px}
+  .voice{background:var(--ink);padding:56px 44px}
+  .voice .glyph{font-size:44px;color:var(--cinnabar);margin-bottom:20px}
+  .voice h3{font-size:26px;margin-bottom:6px}
+  .voice .sub{font-family:var(--sans);font-size:12px;letter-spacing:.26em;color:var(--gold);margin-bottom:24px}
+  .voice p{color:rgba(244,239,228,.66);font-size:15px}
+  .voice ul{list-style:none;margin-top:22px}
+  .voice li{padding:10px 0;border-top:1px dashed var(--line-dark);font-size:14px;color:rgba(244,239,228,.6)}
+  .voice li::before{content:"· ";color:var(--cinnabar)}
+
+  /* ---------- 五行 ---------- */
+  .wuxing{padding:16vh 0;background:var(--paper)}
+  .wuxing-banner{border-radius:8px;overflow:hidden;margin:56px 0;box-shadow:0 30px 70px rgba(28,27,24,.2)}
+  .element-table{width:100%;border-collapse:collapse;font-size:15px}
+  .element-table th,.element-table td{padding:18px 16px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+  .element-table th{font-family:var(--sans);font-size:12px;letter-spacing:.24em;color:var(--mist);font-weight:400}
+  .el-dot{display:inline-block;width:14px;height:14px;border-radius:50%;margin-right:10px;vertical-align:-2px;box-shadow:inset 0 0 4px rgba(0,0,0,.2)}
+  .el-name{font-size:19px;font-weight:700}
+  .el-en{font-family:var(--sans);font-size:12px;letter-spacing:.2em;color:var(--gold)}
+  .element-table td:last-child{color:var(--mist);font-size:14px}
+  .scroll-x{overflow-x:auto}
+
+  /* ---------- 25 底色 ---------- */
+  .persona{padding:14vh 0 12vh;background:var(--paper-2)}
+  .persona-grid{display:grid;grid-template-columns:88px repeat(5,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-top:56px;font-size:14px}
+  .persona-grid>div{background:var(--paper);padding:16px 14px;transition:background .3s,color .3s}
+  .persona-grid .head{background:var(--ink);color:var(--paper);font-family:var(--sans);font-size:12px;letter-spacing:.2em;display:flex;align-items:center}
+  .persona-grid .row-head{writing-mode:vertical-rl;letter-spacing:.4em;display:grid;place-items:center;font-size:17px;font-weight:700;color:var(--cinnabar)}
+  .persona-grid .cell b{display:block;font-size:15.5px;margin-bottom:4px}
+  .persona-grid .cell i{font-style:normal;color:var(--mist);font-size:12.5px;line-height:1.55;display:block}
+  .persona-grid .cell:hover{background:var(--ink);color:var(--paper)}
+  .persona-grid .cell:hover i{color:rgba(244,239,228,.6)}
+
+  /* ---------- 五条信念 ---------- */
+  .beliefs{padding:14vh 0;background:var(--ink);color:var(--paper)}
+  .belief{display:grid;grid-template-columns:80px 1fr 1fr;gap:4vw;padding:36px 0;border-top:1px solid var(--line-dark);align-items:baseline}
+  .belief:last-child{border-bottom:1px solid var(--line-dark)}
+  .belief .no{font-family:var(--sans);font-size:13px;letter-spacing:.3em;color:var(--cinnabar)}
+  .belief .cn{font-size:clamp(19px,2.2vw,27px);line-height:1.5}
+  .belief .en{font-family:var(--sans);font-size:13px;color:rgba(244,239,228,.45);letter-spacing:.06em;line-height:1.8}
+  .belief small{display:block;margin-top:8px;font-size:12px;color:var(--mist);font-family:var(--sans);letter-spacing:.1em}
+
+  /* ---------- 神石谱 ---------- */
+  .canon{padding:16vh 0;background:var(--paper)}
+  .canon-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin:56px 0 70px}
+  .stat{padding:34px 30px;border:1px solid var(--line);border-radius:8px;background:#fff}
+  .stat b{font-size:46px;font-weight:900;color:var(--cinnabar);display:block;line-height:1.1}
+  .stat span{font-family:var(--sans);font-size:13px;letter-spacing:.2em;color:var(--mist)}
+  .canon-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
+  .canon-card{background:var(--paper);padding:36px 30px;transition:.4s}
+  .canon-card:hover{background:#fff}
+  .canon-card .top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px}
+  .canon-card h3{font-size:21px}
+  .canon-card .n{font-family:var(--sans);font-size:12px;color:var(--cinnabar);letter-spacing:.2em}
+  .canon-card p{font-size:13.5px;color:var(--mist)}
+  .canon-card blockquote{margin-top:16px;font-size:14.5px;border-left:2px solid var(--cinnabar);padding-left:14px;color:var(--ink)}
+  .canon-card cite{display:block;font-style:normal;font-family:var(--sans);font-size:11.5px;color:var(--mist);margin-top:6px;letter-spacing:.08em}
+
+  /* ---------- 路线图 ---------- */
+  .roadmap{padding:14vh 0;background:var(--paper-2)}
+  .phase{margin-top:56px}
+  .phase-label{display:flex;align-items:baseline;gap:18px;margin-bottom:8px}
+  .phase-label b{font-size:26px;color:var(--cinnabar)}
+  .phase-label span{font-family:var(--sans);font-size:12px;letter-spacing:.26em;color:var(--mist)}
+  .feat-list{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
+  .feat{background:var(--paper);padding:26px 28px}
+  .feat h4{font-size:17px;margin-bottom:8px}
+  .feat h4 .tag{font-family:var(--sans);font-size:10.5px;letter-spacing:.2em;background:var(--ink);color:var(--paper);padding:3px 10px;border-radius:99px;margin-left:10px;vertical-align:2px}
+  .feat h4 .tag.free{background:var(--cinnabar)}
+  .feat p{font-size:13.5px;color:var(--mist)}
+  .cut{margin-top:40px;padding:24px 30px;border:1px dashed var(--cinnabar);border-radius:8px;font-size:14px;color:var(--mist)}
+  .cut b{color:var(--cinnabar)}
+
+  /* ---------- 边界 ---------- */
+  .ethics{padding:14vh 0;background:var(--ink);color:var(--paper)}
+  .ethics-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line-dark);border:1px solid var(--line-dark);margin-top:56px}
+  .ethic{background:var(--ink);padding:34px 36px;display:flex;gap:20px;align-items:flex-start}
+  .ethic svg{flex:none;margin-top:4px}
+  .ethic h4{font-size:16.5px;margin-bottom:6px}
+  .ethic p{font-size:13.5px;color:rgba(244,239,228,.55)}
+
+  /* ---------- 双市场 & 指标 ---------- */
+  .market{padding:14vh 0;background:var(--paper)}
+  .market-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);margin-top:56px}
+  .market-col{background:#fff;padding:48px 44px}
+  .market-col h3{font-size:24px;margin-bottom:4px}
+  .market-col .en{font-family:var(--sans);font-size:12px;letter-spacing:.3em;color:var(--gold);margin-bottom:26px}
+  .market-col ul{list-style:none}
+  .market-col li{padding:12px 0;border-top:1px dashed var(--line);font-size:14.5px;display:flex;gap:14px}
+  .market-col li::before{content:"—";color:var(--cinnabar)}
+  .metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-top:70px}
+  .metric{background:var(--paper);padding:32px 28px}
+  .metric b{font-size:34px;color:var(--cinnabar);font-weight:900}
+  .metric h5{font-family:var(--sans);font-size:12px;letter-spacing:.18em;color:var(--ink);margin:8px 0 6px}
+  .metric p{font-size:12.5px;color:var(--mist);font-family:var(--sans)}
+
+  /* ---------- Footer CTA ---------- */
+  .cta{padding:18vh 0 12vh;background:var(--ink);color:var(--paper);text-align:left;position:relative;overflow:hidden}
+  .cta-inner{position:relative;z-index:2}
+  .cta h2{font-size:clamp(36px,6vw,72px);line-height:1.25;max-width:14em}
+  .cta h2 em{font-style:normal;color:var(--cinnabar)}
+  .cta .lead{margin:30px 0 46px;font-size:17px}
+  .cta-watermark{
+    position:absolute;right:-2vw;bottom:-6vh;font-size:clamp(160px,26vw,360px);font-weight:900;
+    color:transparent;-webkit-text-stroke:1px rgba(244,239,228,.07);line-height:1;user-select:none;pointer-events:none;
+  }
+  footer{background:var(--ink);color:rgba(244,239,228,.4);padding:34px 6vw;border-top:1px solid var(--line-dark);
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px;font-family:var(--sans);font-size:12px;letter-spacing:.14em}
+
+  /* ---------- 响应式 ---------- */
+  @media (max-width:960px){
+    .hero{grid-template-columns:1fr}
+    .hero-visual{min-height:52vh;order:-1}
+    .hero-text{padding:8vh 6vw 14vh}
+    .origin-grid,.awaken-grid,.voices-grid,.market-grid{grid-template-columns:1fr}
+    .compose-grid,.canon-grid,.canon-stats{grid-template-columns:1fr}
+    .feat-list,.ethics-grid{grid-template-columns:1fr}
+    .metrics{grid-template-columns:repeat(2,1fr)}
+    .belief{grid-template-columns:1fr;gap:10px}
+    .persona-grid{grid-template-columns:56px repeat(5,minmax(130px,1fr));}
+    .persona-scroll{overflow-x:auto}
+    .hero-tag{display:none}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation-duration:.01ms !important;transition-duration:.01ms !important;scroll-behavior:auto}
+    .reveal{opacity:1;transform:none}
+  }
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <a class="brand" href="#top"><span class="dot"></span>点石成精</a>
+  <a class="nav-cta" href="#cta">预售 $29 · ¥69</a>
+</nav>
+
+<!-- ============ HERO ============ -->
+<header class="hero" id="top">
+  <div class="hero-text">
+    <p class="hero-eyebrow">JING · THE 36,501ST · 首发系列</p>
+    <h1>手机<em>碰一下</em>，<br>石头里的精醒来。</h1>
+    <p class="hero-en">Every stone has a jing. Tap to wake it.</p>
+    <p class="hero-sub">一块雅安河石，经过三道手工，配一枚藏着 NFC 芯片的木牌。它是<b>可戴的水晶 × 可抽的神谕卡 × 护身符项链</b>，叠成一块会说话的守护石——唤醒之后，每天跟你说一句话。</p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="#cta">叫醒属于我的那块</a>
+      <a class="btn btn-ghost" href="#origin">为什么是第 36501 块</a>
+    </div>
+    <p class="price-note">预售 $29 / ¥69 &nbsp;·&nbsp; 正式价 $34 / ¥89 &nbsp;·&nbsp; 免下载网页，不做 App</p>
+  </div>
+  <div class="hero-visual">
+    <img src="assets/images/hero-stone.jpg" alt="雅安河石吊坠：手编蜡绳网兜包裹河石，配一枚藏有 NFC 芯片的木质牌">
+    <span class="hero-tag">雅安河石 · 手编绳网 · NFC 木牌</span>
+  </div>
+  <div class="hero-marquee" aria-hidden="true">
+    <div class="marquee-track">
+      <span>点 — 手机碰一下石头</span><span>成精 — 石中之精醒来</span><span>一抽 · 一读 · 一悟</span><span>神的话预制 · 精的话生成</span><span>每天只说一句</span><span>道在瓦甓</span>
+      <span>点 — 手机碰一下石头</span><span>成精 — 石中之精醒来</span><span>一抽 · 一读 · 一悟</span><span>神的话预制 · 精的话生成</span><span>每天只说一句</span><span>道在瓦甓</span>
+    </div>
+  </div>
+</header>
+
+<!-- ============ 出身故事 ============ -->
+<section class="origin" id="origin">
+  <div class="wrap">
+    <div class="origin-grid">
+      <div class="reveal">
+        <p class="kicker">出身 · Origin</p>
+        <div class="big-num">36,5<b>01</b></div>
+        <p class="lead" style="margin-top:24px">《红楼梦》第一回，女娲炼了三万六千五百零一块石头补天，只用了三万六千五百块——<b>剩下一块</b>。每一块成精石，都是"被剩下的那一块"。</p>
+        <div class="origin-quote">
+          "此石自经煅炼之后，灵性已通。"
+          <small>—— 《红楼梦》第一回 · 落选不是缺陷，是另一段旅程</small>
+        </div>
+      </div>
+      <div class="reveal" style="transition-delay:.15s">
+        <p class="kicker">怎么用 · How it reads</p>
+        <h2>「点石成精」<br>产品名就是交互</h2>
+        <p class="lead" style="margin-top:24px"><b style="color:var(--cinnabar)">「点」</b>，是手机碰一下石头；<b style="color:var(--cinnabar)">「成精」</b>，是石中之精醒来。英文品牌 JING，首发系列就叫 The 36,501st。</p>
+        <p class="lead" style="margin-top:20px">开箱时棉布袋里只有一块石头和一张牛皮纸卡，上面写着一句话——</p>
+        <div style="margin-top:28px;display:flex;align-items:center;gap:24px">
+          <span class="seal" style="animation:floaty 5s ease-in-out infinite">点石成精</span>
+          <p style="font-size:20px">"先别起名，<br>碰一下叫醒它。"</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 产品构成 ============ -->
+<section class="compose">
+  <div class="wrap">
+    <div class="reveal">
+      <p class="kicker">构成 · What's inside</p>
+      <h2>一件成精石 = 河石 + 绳网 + 藏芯木牌</h2>
+    </div>
+    <div class="compose-grid reveal">
+      <div class="compose-card">
+        <p class="idx">壹 / STONE</p>
+        <h3>雅安河石</h3>
+        <p>2.5–4 cm，扁圆或微异形。不看纯度，只挑有一处能讲出来的特征的：一道纹、一个孔、一块杂色。杂质即人味。</p>
+      </div>
+      <div class="compose-card">
+        <p class="idx">贰 / KNOT</p>
+        <h3>手编绳网</h3>
+        <p>蜡绳编成网兜包住石头，不打孔、不镶嵌。木牌背面写上编绳手艺人的名字——"由某某编"。</p>
+      </div>
+      <div class="compose-card">
+        <p class="idx">叁 / TAG</p>
+        <h3>NFC 木牌</h3>
+        <p>木质 NFC 标签，写入专属网址后锁定。手写编号和五行字，盖一方朱砂小印。碰一下，打开一个免下载的网页。</p>
+      </div>
+    </div>
+    <div class="compose-foot reveal">
+      <p class="price-tag">预售 <b>$29 / ¥69</b> <s>$34 / ¥89</s></p>
+      <p class="price-tag" style="font-size:13px;color:rgba(244,239,228,.45)">原色棉布袋包装 · 牛皮纸卡 · 线上部分免下载</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 点化流程 ============ -->
+<section class="awaken">
+  <div class="wrap">
+    <div class="awaken-grid">
+      <div class="awaken-visual reveal">
+        <img src="assets/images/awakening.jpg" alt="手机碰一下 NFC 木牌，石精醒来的瞬间">
+        <p class="cap">点化 · 一辈子只有一次，最长 60 秒</p>
+      </div>
+      <div class="reveal" style="transition-delay:.15s">
+        <p class="kicker">唤醒 · Awakening</p>
+        <h2>用户只做一个动作：<br>碰一下。</h2>
+        <div class="steps">
+          <div class="step"><div><h3>碰木牌，按住屏幕上的石头 3 秒</h3><p>墨水晕开，一声清脆的真石敲击，石精睁眼，说出自己的名字和来历。</p></div></div>
+          <div class="step"><div><h3>女娲开口</h3><p>"很久以前天裂了，我做了 36501 块石头去补，只剩一块没用上。它一直在等你。碰碰它吧。"</p></div></div>
+          <div class="step"><div><h3>它问你两件事</h3><p>你的名字，和一件心事。然后发给你一张石籍卡——这块石头的身份档案。</p></div></div>
+          <div class="step"><div><h3>以后每天</h3><p>早上碰一下得一句话，配一小段吟诵；睡前碰一下写一件心事，第二天早上拆开回信。</p></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 两个角色 ============ -->
+<section class="voices">
+  <div class="wrap">
+    <div class="reveal">
+      <p class="kicker">声音 · Two voices</p>
+      <h2>石头里住着两个角色</h2>
+      <p class="lead" style="margin-top:18px">神的话预制，精的话生成。</p>
+    </div>
+    <div class="voices-grid reveal">
+      <div class="voice">
+        <div class="glyph">神</div>
+        <h3>女娲</h3>
+        <p class="sub">预制 · 约 20 句 · 不让 AI 临场发挥</p>
+        <p>很老的长辈：话少、温和，展现神性。</p>
+        <ul>
+          <li>第一次唤醒</li>
+          <li>每月一次</li>
+          <li>你的生日</li>
+        </ul>
+      </div>
+      <div class="voice">
+        <div class="glyph">精</div>
+        <h3>石精</h3>
+        <p class="sub">AI 按这块石头的人设开口 · 边界由我们定</p>
+        <p>睡了很久、刚醒的朋友：直、温和、有点笨拙。</p>
+        <ul>
+          <li>每天早上的一句话</li>
+          <li>你提问时</li>
+          <li>你睡前的回信</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 五行 ============ -->
+<section class="wuxing">
+  <div class="wrap">
+    <div class="reveal">
+      <p class="kicker">颜色是信念 · Five elements</p>
+      <h2>每块石头，按颜色归一行</h2>
+      <p class="lead" style="margin-top:18px">五行出自《尚书·洪范》，吟诵调式按《礼记·月令》。木火土金水，各有自己的一段调子。</p>
+    </div>
+    <div class="wuxing-banner reveal">
+      <img src="assets/images/wuxing-stones.jpg" alt="五行石色：青绿、赤红、黄褐、白、黑五块河石">
+    </div>
+    <div class="scroll-x reveal">
+      <table class="element-table">
+        <thead><tr><th>五行</th><th>石色</th><th>信念</th><th>给海外用户的一句话</th><th>雅安对应石头</th></tr></thead>
+        <tbody>
+          <tr><td><span class="el-dot" style="background:#5c7355"></span><span class="el-name">木</span><br><span class="el-en">GROWTH</span></td><td>青、绿</td><td>生长与希望</td><td>它记得自己曾是一座山的呼吸</td><td>绿色花岗石</td></tr>
+          <tr><td><span class="el-dot" style="background:#b03a2e"></span><span class="el-name">火</span><br><span class="el-en">COURAGE</span></td><td>赤、红</td><td>热忱与勇气</td><td>地心里滚出来的一小块心</td><td>中国红、石棉红</td></tr>
+          <tr><td><span class="el-dot" style="background:#b08d4f"></span><span class="el-name">土</span><br><span class="el-en">GROUNDING</span></td><td>黄、褐</td><td>包容与安定</td><td>大地亲手接住的那一部分</td><td>黄褐色河石</td></tr>
+          <tr><td><span class="el-dot" style="background:#d8d4c8"></span><span class="el-name">金</span><br><span class="el-en">CLARITY</span></td><td>白、金属光泽</td><td>决断与取舍</td><td>被时间削掉多余的一块</td><td>宝兴汉白玉</td></tr>
+          <tr><td><span class="el-dot" style="background:#23242a"></span><span class="el-name">水</span><br><span class="el-en">STILLNESS</span></td><td>黑、深蓝</td><td>智慧与沉静</td><td>山海替它做过一万次冥想</td><td>黑色花岗石</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 25 底色 ============ -->
+<section class="persona">
+  <div class="wrap">
+    <div class="reveal">
+      <p class="kicker">造型是心境 · 25 spirits</p>
+      <h2>5 种颜色 × 5 种造型 = 25 种石精底色</h2>
+      <p class="lead" style="margin-top:18px">每块石头发货前定好人设，人工过目。AI 写人设时以这 25 格为准。</p>
+    </div>
+    <div class="persona-scroll reveal">
+      <div class="persona-grid">
+        <div class="head"></div><div class="head">圆润 · 平和</div><div class="head">棱角 · 决心</div><div class="head">层理 · 沉淀</div><div class="head">孔洞 · 接纳</div><div class="head">斑点 · 人味</div>
+        <div class="row-head">木</div>
+        <div class="cell"><b>慢慢长</b><i>不催你，一年一寸</i></div>
+        <div class="cell"><b>破土者</b><i>先顶出去再说</i></div>
+        <div class="cell"><b>年轮</b><i>记得每一个冬天</i></div>
+        <div class="cell"><b>透光叶</b><i>空处留给光</i></div>
+        <div class="cell"><b>虫咬叶</b><i>缺一块，照样绿</i></div>
+        <div class="row-head">火</div>
+        <div class="cell"><b>炉边人</b><i>暖，但不烫手</i></div>
+        <div class="cell"><b>点火者</b><i>说一句就点着</i></div>
+        <div class="cell"><b>余烬</b><i>烧过了，还热</i></div>
+        <div class="cell"><b>灯笼</b><i>心是空的才亮</i></div>
+        <div class="cell"><b>火星</b><i>小，但落哪亮哪</i></div>
+        <div class="row-head">土</div>
+        <div class="cell"><b>田埂</b><i>你走，我托着</i></div>
+        <div class="cell"><b>界石</b><i>这里是你的边</i></div>
+        <div class="cell"><b>老墙</b><i>一层一层扛过来</i></div>
+        <div class="cell"><b>窑洞</b><i>进来歇一会儿</i></div>
+        <div class="cell"><b>粗陶</b><i>不光滑，但好用</i></div>
+        <div class="row-head">金</div>
+        <div class="cell"><b>满月</b><i>看清了，不刺眼</i></div>
+        <div class="cell"><b>刀刃</b><i>该断就断</i></div>
+        <div class="cell"><b>磨刀石</b><i>被磨的也在磨人</i></div>
+        <div class="cell"><b>钟</b><i>空着，一敲就响</i></div>
+        <div class="cell"><b>旧镜</b><i>有锈，照得清</i></div>
+        <div class="row-head">水</div>
+        <div class="cell"><b>深潭</b><i>话少，一句到底</i></div>
+        <div class="cell"><b>礁石</b><i>浪来，我不走</i></div>
+        <div class="cell"><b>冰层</b><i>慢慢结，慢慢化</i></div>
+        <div class="cell"><b>泉眼</b><i>一点一点往外冒</i></div>
+        <div class="cell"><b>夜空</b><i>黑里有星</i></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 五条信念 ============ -->
+<section class="beliefs">
+  <div class="wrap">
+    <div class="reveal">
+      <p class="kicker">底层信念 · Beliefs</p>
+      <h2>写进石精世界观的五条信念</h2>
+    </div>
+    <div style="margin-top:56px" class="reveal">
+      <div class="belief"><span class="no">壹</span><div><p class="cn">缺一块，也是一整块石头。</p><small>补天剩下的顽石 · 《红楼梦》第一回</small></div><p class="en">Missing a piece is still a whole stone.</p></div>
+      <div class="belief"><span class="no">贰</span><div><p class="cn">我碎过很多次，碎完还是我。</p><small>石破天惊逗秋雨 · 李贺；启母石裂而生启</small></div><p class="en">I have broken many times. Still me.</p></div>
+      <div class="belief"><span class="no">叁</span><div><p class="cn">今天往心里放一样好东西。</p><small>太湖石的"漏""透"：空处也是它</small></div><p class="en">Put one good thing inside you today.</p></div>
+      <div class="belief"><span class="no">肆</span><div><p class="cn">你拿到的是起点，不是结局。</p><small>《左传·僖公十六年》叔兴："吉凶由人"</small></div><p class="en">What you were given is a start, not an ending.</p></div>
+      <div class="belief"><span class="no">伍</span><div><p class="cn">照你本来的样子走。</p><small>《中庸》："天命之谓性，率性之谓道"</small></div><p class="en">Walk the way you were made.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 神石谱 ============ -->
+<section class="canon">
+  <div class="wrap">
+    <div class="reveal">
+      <p class="kicker">神石谱 · The Canon</p>
+      <h2>古籍里的 33 块神石，是这块石头的文库</h2>
+      <p class="lead" style="margin-top:18px">每块石头的身世、守护典故和每天一句，都从这份谱里取。每条原文都打开原文页面核对过——引古书只用核对过的原文，不许 AI 自己编。</p>
+    </div>
+    <div class="canon-stats reveal">
+      <div class="stat"><b>33</b><span>块神石 · 九类</span></div>
+      <div class="stat"><b>29</b><span>部古籍 · 先秦至清</span></div>
+      <div class="stat"><b>150</b><span>首发每日一句 · 五行各 30</span></div>
+    </div>
+    <div class="canon-grid reveal">
+      <div class="canon-card"><div class="top"><h3>造化</h3><span class="n">4 块</span></div><p>石头从哪来 · 女娲台词、每块石头的身世</p><blockquote>"女娲炼五色石以补苍天"<cite>《淮南子·览冥训》</cite></blockquote></div>
+      <div class="canon-card"><div class="top"><h3>地骨</h3><span class="n">4 块</span></div><p>石头里装着天地 · "成精"最硬的出处</p><blockquote>"天地至精之气，结而为石"<cite>《云林石谱》孔传序（据转引）</cite></blockquote></div>
+      <div class="canon-card"><div class="top"><h3>生灵</h3><span class="n">2 块</span></div><p>石头里生出生命 · 点化动画"石纹裂开"的依据</p><blockquote>"感之既久，遂有灵通之意"<cite>《西游记》第一回 · 花果山仙石</cite></blockquote></div>
+      <div class="canon-card"><div class="top"><h3>开口</h3><span class="n">4 块</span></div><p>石头会被点醒、会听、会说</p><blockquote>"石不能言最可人"<cite>陆游《闲居自述》 · 精的原则：一天只说一句</cite></blockquote></div>
+      <div class="canon-card"><div class="top"><h3>声形</h3><span class="n">3 块</span></div><p>石头会响 · 吟诵与碰石声音设计、雨天彩蛋</p><blockquote>"水石相搏，声如洪钟"<cite>苏轼《石钟山记》</cite></blockquote></div>
+      <div class="canon-card"><div class="top"><h3>信念</h3><span class="n">7 块</span></div><p>石头替你守住的东西 · 今日一谕的主矿脉</p><blockquote>"石可破也，而不可夺坚"<cite>《吕氏春秋·诚廉》</cite></blockquote></div>
+      <div class="canon-card"><div class="top"><h3>知遇</h3><span class="n">5 块</span></div><p>普通的石头被郑重对待 · 诚实回应"智商税"质疑</p><blockquote>"藏之愈固，守之弥坚"<cite>《阙子》燕石（据转引） · 石头普通，珍惜不普通</cite></blockquote></div>
+      <div class="canon-card"><div class="top"><h3>结缘</h3><span class="n">3 块</span></div><p>石头择主、为师、守约 · 转赠与长期陪伴</p><blockquote>"此石能自择主"<cite>蒲松龄《聊斋志异·石清虚》</cite></blockquote></div>
+      <div class="canon-card"><div class="top"><h3>守护</h3><span class="n">1 块</span></div><p>挡在你前面的石头 · 只讲勇气，不宣称辟邪</p><blockquote>"师猛虎，石敢当，所不侵"<cite>史游《急就篇》</cite></blockquote></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 玩法路线图 ============ -->
+<section class="roadmap">
+  <div class="wrap">
+    <div class="reveal">
+      <p class="kicker">玩法 · Roadmap</p>
+      <h2>从一块石头，到一本石头记</h2>
+    </div>
+
+    <div class="phase reveal">
+      <div class="phase-label"><b>P0</b><span>首发</span></div>
+      <div class="feat-list">
+        <div class="feat"><h4>点化</h4><p>第一次碰，石头醒来。一辈子只有一次，最长 60 秒，可跳过。</p></div>
+        <div class="feat"><h4>拍石点精<span class="tag free">免费入口</span></h4><p>拍一张自己捡的石头，30 秒动画看它"醒来"。零库存引流、测传播，每台手机每天限 3 次。</p></div>
+        <div class="feat"><h4>今日一谕</h4><p>早上碰一下，3 秒内出现今天的一句话 + 一小段吟诵 + 一行结合你心事的悄悄话。点"为什么"看古籍出处。</p></div>
+        <div class="feat"><h4>问精</h4><p>打字问一件事，石精按人设回答，最后一定给一件今天能做的小事。每天最多问 3 次。</p></div>
+        <div class="feat"><h4>石籍卡</h4><p>点化后拿到的身份卡：名字、属性、脾气、来历、第一句话、真的身世、守护典故、编绳人。</p></div>
+        <div class="feat"><h4>9:16 分享卡</h4><p>竖版手机尺寸，中间是石头真实照片，配今天那句话和编号，角落标明"AI 辅助生成"。</p></div>
+        <div class="feat"><h4>真石之声</h4><p>在河滩录下雅安石头互敲的声音，顺手拍成短视频——冷启动内容，成本近乎为零。</p></div>
+      </div>
+    </div>
+
+    <div class="phase reveal">
+      <div class="phase-label"><b>P1</b><span>首发后</span></div>
+      <div class="feat-list">
+        <div class="feat"><h4>枕石托梦</h4><p>睡前写一件心事，信封封上"今晚我替你想"，第二天早上 6 点以后才能拆开回信。</p></div>
+        <div class="feat"><h4>石头记</h4><p>每周日一封邮件，像章回小说："第三回：你问要不要走，石头说慢慢拐弯，别跳。"</p></div>
+        <div class="feat"><h4>谕历<span class="tag">待定</span></h4><p>每天那句话排成一本编年史。只记"第几次相见"，断了不提醒、不扣分。</p></div>
+        <div class="feat"><h4>刻字木牌</h4><p>木牌刻名字或日期，加 $8，适合送礼。首批可先用手写代替。</p></div>
+        <div class="feat"><h4>点精结</h4><p>只卖手编绳和 NFC 木牌，给你自己捡的石头穿上。最轻、最便宜，国际运费最低。</p></div>
+      </div>
+    </div>
+
+    <div class="phase reveal">
+      <div class="phase-label"><b>P2</b><span>验证之后</span></div>
+      <div class="feat-list">
+        <div class="feat"><h4>转赠</h4><p>石头连同它的石头记一起送人，做账号迁移。</p></div>
+        <div class="feat"><h4>月度神谕订阅</h4><p>每月新卡面、新吟诵，数字内容几乎零边际成本。</p></div>
+        <div class="feat"><h4>五行全套 · 节气限定</h4><p>五色凑一套；春分、夏至、秋分、冬至出限定神谕。</p></div>
+        <div class="feat"><h4>石猴彩蛋</h4><p>一天连碰三次，花果山的石猴出来打个招呼（《西游记》第一回）。</p></div>
+      </div>
+    </div>
+
+    <div class="cut reveal"><b>先砍掉：</b>金属包芯、篆刻、中英以外的语言、神话大乱斗、稀有度抽卡、众筹。稀有度只作"解读"——同一批石头同一个价，少见的特征记为"奇相"印在石籍卡上，不分等级、不卖重抽。</div>
+  </div>
+</section>
+
+<!-- ============ 说话边界 ============ -->
+<section class="ethics">
+  <div class="wrap">
+    <div class="reveal">
+      <p class="kicker">边界 · Boundaries</p>
+      <h2>给力量，不给判决</h2>
+    </div>
+    <div class="ethics-grid reveal">
+      <div class="ethic">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#b03a2e" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></svg>
+        <div><h4>一抽一读一悟</h4><p>碰一下，读一句，点"为什么"看典故。给一个今天能做的动作，不预言、不断吉凶。</p></div>
+      </div>
+      <div class="ethic">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#b03a2e" stroke-width="1.6"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/></svg>
+        <div><h4>不算命</h4><p>不给看病、法律、投资建议，不说转运、招财、开光。只讲勇气，不宣称辟邪。</p></div>
+      </div>
+      <div class="ethic">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#b03a2e" stroke-width="1.6"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
+        <div><h4>引用须核对</h4><p>引古书只用核对过的原文，不许 AI 自己编。存疑的出处标"据转引"或"待校对"。</p></div>
+      </div>
+      <div class="ethic">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#b03a2e" stroke-width="1.6"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.5-6.5 8-6.5s8 2.5 8 6.5"/></svg>
+        <div><h4>诚实面对用户</h4><p>页面一直标明"你在和 AI 说话"，不扮演恋人。有人流露想伤害自己时停止扮演。只给 18 岁以上的人用（待定）。</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 双市场 & 30 天 ============ -->
+<section class="market">
+  <div class="wrap">
+    <div class="reveal">
+      <p class="kicker">出海与国内 · Go to market</p>
+      <h2>同一块石头，两条上岸的路</h2>
+    </div>
+    <div class="market-grid reveal">
+      <div class="market-col">
+        <h3>海外</h3><p class="en">OVERSEAS · JING</p>
+        <ul>
+          <li>渠道：Shopify 独立站、Etsy</li>
+          <li>免费入口：拍石点精</li>
+          <li>AI 开放：点化、一谕、问精、托梦全开</li>
+          <li>首批 100 块</li>
+        </ul>
+      </div>
+      <div class="market-col">
+        <h3>国内</h3><p class="en">CHINA · 点石成精</p>
+        <ul>
+          <li>渠道：小红书店铺 + 笔记</li>
+          <li>免费入口：小红书"选一块石头"图文</li>
+          <li>AI 策略：先上人工定稿的预制内容，登记后再开实时对话；"问精"换成预制的"问石"</li>
+          <li>首批 50 块</li>
+        </ul>
+      </div>
+    </div>
+    <div class="metrics reveal">
+      <div class="metric"><b>≥15%</b><h5>免费点化分享率</h5><p>海外 · 30 天</p></div>
+      <div class="metric"><b>≥50</b><h5>海外预售单数</h5><p>海外 · 30 天</p></div>
+      <div class="metric"><b>≥50</b><h5>国内预售单数</h5><p>国内 · 30 天</p></div>
+      <div class="metric"><b>≥40%</b><h5>第 7 天碰石率</h5><p>国内首批买家</p></div>
+    </div>
+    <p class="lead reveal" style="margin-top:26px;font-size:13.5px">两条线都达标，才进入下一阶段。文中成本、价格、转化率均为估算，还没有询价或验证。待讨论：是否从众筹开始。</p>
+  </div>
+</section>
+
+<!-- ============ CTA ============ -->
+<section class="cta" id="cta">
+  <div class="wrap cta-inner">
+    <div class="reveal">
+      <p class="kicker">The 36,501st</p>
+      <h2>女娲补天剩的那块石头，<br><em>一直在等你。</em></h2>
+      <p class="lead">预售 $29 / ¥69（正式价 $34 / ¥89）。碰一下，叫醒它。</p>
+      <a class="btn btn-primary" href="#top">预售开启 · 叫醒我的石头</a>
+    </div>
+  </div>
+  <div class="cta-watermark" aria-hidden="true">精</div>
+</section>
+
+<footer>
+  <span>点石成精 JING · Every stone has a jing, a sleeping spirit. Tap to wake it.</span>
+  <span>道在瓦甓 —— 《庄子·知北游》</span>
+</footer>
+
+<script>
+(function(){
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // 导航滚动态
+  var nav = document.getElementById('nav');
+  var onScroll = function(){
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  };
+  window.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+
+  // 滚动显现
+  var els = document.querySelectorAll('.reveal');
+  if (reduce || !('IntersectionObserver' in window)) {
+    els.forEach(function(el){ el.classList.add('in'); });
+    return;
+  }
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, {threshold: 0.12, rootMargin: '0px 0px -8% 0px'});
+  els.forEach(function(el){ io.observe(el); });
+})();
+</script>
+</body>
+</html>
