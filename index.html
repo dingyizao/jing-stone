@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>点石成精 JING · 一块会说话的守护石</title>
-<meta name="description" content="一块雅安河石，经过三道手工，配一枚藏着 NFC 芯片的木牌。手机碰一下，石头里的精醒来，之后每天跟你说一句话。">
+<meta name="description" content="一块雅安河石，经过三道手工，配一枚藏着 NFC 芯片的木牌。手机碰一下，石头里的「精」就醒了，之后每天跟你说一句话。首发系列：Fallen Sky 落天。">
 <style>
   :root{
     --ink:#1c1b18;
@@ -51,7 +51,7 @@
   .reveal{opacity:0;transform:translateY(34px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1)}
   .reveal.in{opacity:1;transform:none}
   .seal{
-    display:inline-grid;place-items:center;width:64px;height:64px;
+    display:inline-grid;place-items:center;width:64px;height:64px;flex:none;
     background:var(--cinnabar);color:var(--paper);
     font-size:22px;font-weight:700;letter-spacing:.1em;line-height:1.25;
     border-radius:6px;transform:rotate(-3deg);
@@ -119,11 +119,16 @@
   /* ---------- 出身故事 ---------- */
   .origin{padding:16vh 0;background:var(--paper)}
   .origin-grid{display:grid;grid-template-columns:1fr 1fr;gap:8vw;align-items:center}
-  .big-num{
-    font-size:clamp(72px,12vw,168px);font-weight:900;line-height:1;letter-spacing:-.02em;
+  .big-char{
+    font-size:clamp(88px,13vw,180px);font-weight:900;line-height:1.06;letter-spacing:.02em;
     color:transparent;-webkit-text-stroke:1.5px rgba(28,27,24,.35);user-select:none;
   }
-  .big-num b{color:var(--cinnabar);-webkit-text-stroke:0}
+  .big-char b{color:var(--cinnabar);-webkit-text-stroke:0}
+  .stone-no{
+    font-family:var(--sans);font-size:13px;letter-spacing:.3em;color:var(--mist);
+    border:1px solid var(--line);display:inline-block;padding:10px 22px;border-radius:999px;margin-top:26px;
+  }
+  .stone-no b{color:var(--cinnabar)}
   .origin-quote{
     margin-top:34px;padding:26px 30px;border-left:3px solid var(--cinnabar);
     background:var(--paper-2);font-size:17px;
@@ -180,7 +185,7 @@
   /* ---------- 五行 ---------- */
   .wuxing{padding:16vh 0;background:var(--paper)}
   .wuxing-banner{border-radius:8px;overflow:hidden;margin:56px 0;box-shadow:0 30px 70px rgba(28,27,24,.2)}
-  .element-table{width:100%;border-collapse:collapse;font-size:15px}
+  .element-table{width:100%;border-collapse:collapse;font-size:15px;min-width:760px}
   .element-table th,.element-table td{padding:18px 16px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
   .element-table th{font-family:var(--sans);font-size:12px;letter-spacing:.24em;color:var(--mist);font-weight:400}
   .el-dot{display:inline-block;width:14px;height:14px;border-radius:50%;margin-right:10px;vertical-align:-2px;box-shadow:inset 0 0 4px rgba(0,0,0,.2)}
@@ -189,9 +194,12 @@
   .element-table td:last-child{color:var(--mist);font-size:14px}
   .scroll-x{overflow-x:auto}
 
+  /* ---------- 心境五形 ---------- */
+  .mood{padding:0 0 14vh;background:var(--paper)}
+
   /* ---------- 25 底色 ---------- */
   .persona{padding:14vh 0 12vh;background:var(--paper-2)}
-  .persona-grid{display:grid;grid-template-columns:88px repeat(5,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-top:56px;font-size:14px}
+  .persona-grid{display:grid;grid-template-columns:88px repeat(5,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-top:56px;font-size:14px;min-width:860px}
   .persona-grid>div{background:var(--paper);padding:16px 14px;transition:background .3s,color .3s}
   .persona-grid .head{background:var(--ink);color:var(--paper);font-family:var(--sans);font-size:12px;letter-spacing:.2em;display:flex;align-items:center}
   .persona-grid .row-head{writing-mode:vertical-rl;letter-spacing:.4em;display:grid;place-items:center;font-size:17px;font-weight:700;color:var(--cinnabar)}
@@ -199,6 +207,35 @@
   .persona-grid .cell i{font-style:normal;color:var(--mist);font-size:12.5px;line-height:1.55;display:block}
   .persona-grid .cell:hover{background:var(--ink);color:var(--paper)}
   .persona-grid .cell:hover i{color:rgba(244,239,228,.6)}
+
+  /* ---------- 奇相 & 生辰 ---------- */
+  .omen{padding:14vh 0;background:var(--ink);color:var(--paper)}
+  .omen-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line-dark);border:1px solid var(--line-dark);margin-top:56px}
+  .omen-card{background:var(--ink);padding:34px 30px;transition:background .4s}
+  .omen-card:hover{background:var(--ink-2)}
+  .omen-card h3{font-size:20px;display:flex;justify-content:space-between;align-items:baseline}
+  .omen-card h3 span{font-family:var(--sans);font-size:11px;letter-spacing:.2em;color:var(--gold)}
+  .omen-card p{font-size:14px;color:rgba(244,239,228,.6);margin-top:10px}
+  .omen-note{margin-top:34px;font-size:13.5px;color:rgba(244,239,228,.5);font-family:var(--sans);letter-spacing:.06em}
+  .birth{margin-top:60px;display:flex;gap:26px;align-items:flex-start;border-top:1px solid var(--line-dark);padding-top:44px}
+  .birth h3{font-size:22px;min-width:120px}
+  .birth p{color:rgba(244,239,228,.62);font-size:15px;max-width:64ch}
+
+  /* ---------- 示例精石 ---------- */
+  .gallery{padding:16vh 0;background:var(--paper)}
+  .gallery-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-top:56px}
+  .stone-card{
+    background:#fff;border:1px solid var(--line);border-radius:8px;padding:28px 22px;
+    display:flex;flex-direction:column;transition:transform .4s cubic-bezier(.16,1,.3,1),box-shadow .4s;
+  }
+  .stone-card:hover{transform:translateY(-6px);box-shadow:0 24px 50px rgba(28,27,24,.14)}
+  .stone-card .no{font-family:var(--sans);font-size:11px;letter-spacing:.24em;color:var(--mist)}
+  .stone-card h3{font-size:26px;margin:10px 0 4px}
+  .stone-card .meta{font-family:var(--sans);font-size:12px;letter-spacing:.12em;margin-bottom:16px}
+  .stone-card .meta b{font-weight:400;padding:2px 8px;border-radius:99px;color:#fff;font-size:11px}
+  .stone-card .guardian{font-size:12.5px;color:var(--mist);border-top:1px dashed var(--line);padding-top:12px;margin-top:auto}
+  .stone-card blockquote{font-size:14px;line-height:1.7;color:var(--ink);margin:14px 0 18px;min-height:96px}
+  .m-木{background:#5c7355}.m-火{background:#b03a2e}.m-土{background:#b08d4f}.m-金{background:#a89e88}.m-水{background:#23242a}
 
   /* ---------- 五条信念 ---------- */
   .beliefs{padding:14vh 0;background:var(--ink);color:var(--paper)}
@@ -282,12 +319,14 @@
     .hero-visual{min-height:52vh;order:-1}
     .hero-text{padding:8vh 6vw 14vh}
     .origin-grid,.awaken-grid,.voices-grid,.market-grid{grid-template-columns:1fr}
-    .compose-grid,.canon-grid,.canon-stats{grid-template-columns:1fr}
+    .compose-grid,.canon-grid,.canon-stats,.omen-grid{grid-template-columns:1fr}
     .feat-list,.ethics-grid{grid-template-columns:1fr}
     .metrics{grid-template-columns:repeat(2,1fr)}
+    .gallery-grid{grid-template-columns:repeat(2,1fr)}
     .belief{grid-template-columns:1fr;gap:10px}
     .persona-grid{grid-template-columns:56px repeat(5,minmax(130px,1fr));}
     .persona-scroll{overflow-x:auto}
+    .birth{flex-direction:column;gap:10px}
     .hero-tag{display:none}
   }
   @media (prefers-reduced-motion:reduce){
@@ -306,13 +345,13 @@
 <!-- ============ HERO ============ -->
 <header class="hero" id="top">
   <div class="hero-text">
-    <p class="hero-eyebrow">JING · THE 36,501ST · 首发系列</p>
-    <h1>手机<em>碰一下</em>，<br>石头里的精醒来。</h1>
+    <p class="hero-eyebrow">JING · FALLEN SKY 落天 · 首发系列</p>
+    <h1>手机<em>碰一下</em>，<br>石头里的精就醒了。</h1>
     <p class="hero-en">Every stone has a jing. Tap to wake it.</p>
-    <p class="hero-sub">一块雅安河石，经过三道手工，配一枚藏着 NFC 芯片的木牌。它是<b>可戴的水晶 × 可抽的神谕卡 × 护身符项链</b>，叠成一块会说话的守护石——唤醒之后，每天跟你说一句话。</p>
+    <p class="hero-sub">一块雅安河石，经过三道手工，配一枚藏着 NFC 芯片的木牌。它是<b>可戴的水晶 × 可抽的神谕卡 × 护身符项链</b>，叠成一块会说话的守护石——传说里，它是从补天的漏处落下来的石头，醒来之后，每天跟你说一句话。</p>
     <div class="hero-actions">
       <a class="btn btn-primary" href="#cta">叫醒属于我的那块</a>
-      <a class="btn btn-ghost" href="#origin">为什么是第 36501 块</a>
+      <a class="btn btn-ghost" href="#origin">什么是落天石</a>
     </div>
     <p class="price-note">预售 $29 / ¥69 &nbsp;·&nbsp; 正式价 $34 / ¥89 &nbsp;·&nbsp; 免下载网页，不做 App</p>
   </div>
@@ -322,34 +361,36 @@
   </div>
   <div class="hero-marquee" aria-hidden="true">
     <div class="marquee-track">
-      <span>点 — 手机碰一下石头</span><span>成精 — 石中之精醒来</span><span>一抽 · 一读 · 一悟</span><span>神的话预制 · 精的话生成</span><span>每天只说一句</span><span>道在瓦甓</span>
-      <span>点 — 手机碰一下石头</span><span>成精 — 石中之精醒来</span><span>一抽 · 一读 · 一悟</span><span>神的话预制 · 精的话生成</span><span>每天只说一句</span><span>道在瓦甓</span>
+      <span>点 — 手机碰一下石头</span><span>成精 — 石中之精醒来</span><span>落天 — 从补天的漏处落下</span><span>一抽 · 一读 · 一悟</span><span>神的话预制 · 精的话生成</span><span>每天只说一句</span><span>道在瓦甓</span>
+      <span>点 — 手机碰一下石头</span><span>成精 — 石中之精醒来</span><span>落天 — 从补天的漏处落下</span><span>一抽 · 一读 · 一悟</span><span>神的话预制 · 精的话生成</span><span>每天只说一句</span><span>道在瓦甓</span>
     </div>
   </div>
 </header>
 
-<!-- ============ 出身故事 ============ -->
+<!-- ============ 出身故事：落天石 ============ -->
 <section class="origin" id="origin">
   <div class="wrap">
     <div class="origin-grid">
       <div class="reveal">
-        <p class="kicker">出身 · Origin</p>
-        <div class="big-num">36,5<b>01</b></div>
-        <p class="lead" style="margin-top:24px">《红楼梦》第一回，女娲炼了三万六千五百零一块石头补天，只用了三万六千五百块——<b>剩下一块</b>。每一块成精石，都是"被剩下的那一块"。</p>
+        <p class="kicker">出身 · Fallen Sky</p>
+        <div class="big-char">西蜀<br><b>天漏</b></div>
+        <p class="lead" style="margin-top:24px">女娲炼五色石补天（《淮南子·览冥训》）。补到西蜀雅安上空，那一处始终没补严实——所以雅安自古叫"西蜀天漏"，终年多雨，如今叫雨城。雨下得大的时候，当年补在天上的石头从漏处松落，掉进青衣江，被江水磨了很久很久。</p>
         <div class="origin-quote">
-          "此石自经煅炼之后，灵性已通。"
-          <small>—— 《红楼梦》第一回 · 落选不是缺陷，是另一段旅程</small>
+          "女娲炼石补天处，石破天惊逗秋雨。"
+          <small>—— 李贺《李凭箜篌引》 · 古人笔下石头从天上落下来的样子</small>
         </div>
       </div>
       <div class="reveal" style="transition-delay:.15s">
-        <p class="kicker">怎么用 · How it reads</p>
-        <h2>「点石成精」<br>产品名就是交互</h2>
-        <p class="lead" style="margin-top:24px"><b style="color:var(--cinnabar)">「点」</b>，是手机碰一下石头；<b style="color:var(--cinnabar)">「成精」</b>，是石中之精醒来。英文品牌 JING，首发系列就叫 The 36,501st。</p>
-        <p class="lead" style="margin-top:20px">开箱时棉布袋里只有一块石头和一张牛皮纸卡，上面写着一句话——</p>
-        <div style="margin-top:28px;display:flex;align-items:center;gap:24px">
+        <p class="kicker">落天石 · What it is</p>
+        <h2>每一块精石，都补过天，<br>又从"漏天"落回人间。</h2>
+        <p class="lead" style="margin-top:24px">我们在青衣江里捡到的，就是这些<b style="color:var(--cinnabar)">落天石</b>。它替天撑过很久，落下来时带着裂痕和杂色——<b style="color:var(--ink)">不完美，是它扛过天的证据</b>。</p>
+        <p class="lead" style="margin-top:18px">《红楼梦》里那块没被用上的顽石，下凡历劫，成了《石头记》。它是所有落天石的"兄长"，不卖；每块落天石醒来后，也会替主人写一本自己的石头记。</p>
+        <p class="stone-no">编号示例 · <b>落天石 No. 00137 · 青衣江</b></p>
+        <div style="margin-top:30px;display:flex;align-items:center;gap:24px">
           <span class="seal" style="animation:floaty 5s ease-in-out infinite">点石成精</span>
-          <p style="font-size:20px">"先别起名，<br>碰一下叫醒它。"</p>
+          <p style="font-size:19px">开箱牛皮纸卡背面写着：<br>"先别起名，碰一下叫醒它。"</p>
         </div>
+        <p class="lead" style="margin-top:22px;font-size:13px">对外只说"传说里"，不说"这块真的从天上掉下来"。</p>
       </div>
     </div>
   </div>
@@ -381,7 +422,7 @@
     </div>
     <div class="compose-foot reveal">
       <p class="price-tag">预售 <b>$29 / ¥69</b> <s>$34 / ¥89</s></p>
-      <p class="price-tag" style="font-size:13px;color:rgba(244,239,228,.45)">原色棉布袋包装 · 牛皮纸卡 · 线上部分免下载</p>
+      <p class="price-tag" style="font-size:13px;color:rgba(244,239,228,.45)">原色棉布袋包装 · 牛皮纸卡正面：A goddess mended the sky. Over Ya'an, it still leaks. This one fell through.</p>
     </div>
   </div>
 </section>
@@ -399,9 +440,9 @@
         <h2>用户只做一个动作：<br>碰一下。</h2>
         <div class="steps">
           <div class="step"><div><h3>碰木牌，按住屏幕上的石头 3 秒</h3><p>墨水晕开，一声清脆的真石敲击，石精睁眼，说出自己的名字和来历。</p></div></div>
-          <div class="step"><div><h3>女娲开口</h3><p>"很久以前天裂了，我做了 36501 块石头去补，只剩一块没用上。它一直在等你。碰碰它吧。"</p></div></div>
-          <div class="step"><div><h3>它问你两件事</h3><p>你的名字，和一件心事。然后发给你一张石籍卡——这块石头的身份档案。</p></div></div>
-          <div class="step"><div><h3>以后每天</h3><p>早上碰一下得一句话，配一小段吟诵；睡前碰一下写一件心事，第二天早上拆开回信。</p></div></div>
+          <div class="step"><div><h3>女娲开口</h3><p>"很久以前天裂了，我炼石去补。补到雅安上空，还是漏了一处，所以那里一直下雨。雨大的时候，就有石头从漏处落下来。这一块，落到了你手里。碰碰它吧。"</p></div></div>
+          <div class="step"><div><h3>它问你两件事</h3><p>你的名字，和一件心事。然后发给你一张石籍卡——这块石头的身份档案，编号、本命、心境、底色、守护典故、生辰都在上面。</p></div></div>
+          <div class="step"><div><h3>以后每天</h3><p>早上碰一下得一句话，配一小段吟诵；睡前碰一下写一件心事，第二天早上拆开回信；每周日收到一封邮件——这一周的石头记。</p></div></div>
         </div>
       </div>
     </div>
@@ -425,7 +466,7 @@
         <ul>
           <li>第一次唤醒</li>
           <li>每月一次</li>
-          <li>你的生日</li>
+          <li>你的生日，和石头的生辰（唤醒那天所在的节气）</li>
         </ul>
       </div>
       <div class="voice">
@@ -443,26 +484,49 @@
   </div>
 </section>
 
-<!-- ============ 五行 ============ -->
+<!-- ============ 本命：五行 ============ -->
 <section class="wuxing">
   <div class="wrap">
     <div class="reveal">
-      <p class="kicker">颜色是信念 · Five elements</p>
-      <h2>每块石头，按颜色归一行</h2>
-      <p class="lead" style="margin-top:18px">五行出自《尚书·洪范》，吟诵调式按《礼记·月令》。木火土金水，各有自己的一段调子。</p>
+      <p class="kicker">本命 · 颜色定信念</p>
+      <h2>看颜色，定它的"本命"</h2>
+      <p class="lead" style="margin-top:18px">五行出自《尚书·洪范》，吟诵调式按《礼记·月令》。判定只看面积最大的主色；两色各半，另记奇相"阴阳"。对海外用户不讲"五行"，只说关键词。</p>
     </div>
     <div class="wuxing-banner reveal">
       <img src="assets/images/wuxing-stones.jpg" alt="五行石色：青绿、赤红、黄褐、白、黑五块河石">
     </div>
     <div class="scroll-x reveal">
       <table class="element-table">
-        <thead><tr><th>五行</th><th>石色</th><th>信念</th><th>给海外用户的一句话</th><th>雅安对应石头</th></tr></thead>
+        <thead><tr><th>本命</th><th>判定颜色</th><th>信念</th><th>给海外用户的一句话</th><th>吟诵 · 雅安石源</th></tr></thead>
         <tbody>
-          <tr><td><span class="el-dot" style="background:#5c7355"></span><span class="el-name">木</span><br><span class="el-en">GROWTH</span></td><td>青、绿</td><td>生长与希望</td><td>它记得自己曾是一座山的呼吸</td><td>绿色花岗石</td></tr>
-          <tr><td><span class="el-dot" style="background:#b03a2e"></span><span class="el-name">火</span><br><span class="el-en">COURAGE</span></td><td>赤、红</td><td>热忱与勇气</td><td>地心里滚出来的一小块心</td><td>中国红、石棉红</td></tr>
-          <tr><td><span class="el-dot" style="background:#b08d4f"></span><span class="el-name">土</span><br><span class="el-en">GROUNDING</span></td><td>黄、褐</td><td>包容与安定</td><td>大地亲手接住的那一部分</td><td>黄褐色河石</td></tr>
-          <tr><td><span class="el-dot" style="background:#d8d4c8"></span><span class="el-name">金</span><br><span class="el-en">CLARITY</span></td><td>白、金属光泽</td><td>决断与取舍</td><td>被时间削掉多余的一块</td><td>宝兴汉白玉</td></tr>
-          <tr><td><span class="el-dot" style="background:#23242a"></span><span class="el-name">水</span><br><span class="el-en">STILLNESS</span></td><td>黑、深蓝</td><td>智慧与沉静</td><td>山海替它做过一万次冥想</td><td>黑色花岗石</td></tr>
+          <tr><td><span class="el-dot" style="background:#5c7355"></span><span class="el-name">木</span><br><span class="el-en">GROWTH</span></td><td>青、绿</td><td>生长与希望</td><td>它记得自己曾是一座山的呼吸</td><td>角调 · 绿色花岗石</td></tr>
+          <tr><td><span class="el-dot" style="background:#b03a2e"></span><span class="el-name">火</span><br><span class="el-en">COURAGE</span></td><td>赤、红、粉红</td><td>热忱与勇气</td><td>地心里滚出来的一小块心</td><td>徵调 · 中国红、石棉红</td></tr>
+          <tr><td><span class="el-dot" style="background:#b08d4f"></span><span class="el-name">土</span><br><span class="el-en">GROUNDING</span></td><td>黄、褐、赭</td><td>包容与安定</td><td>大地亲手接住的那一部分</td><td>宫调 · 黄褐色河石</td></tr>
+          <tr><td><span class="el-dot" style="background:#d8d4c8"></span><span class="el-name">金</span><br><span class="el-en">CLARITY</span></td><td>白、灰白</td><td>决断与取舍</td><td>被时间削掉多余的一块</td><td>商调 · 宝兴汉白玉</td></tr>
+          <tr><td><span class="el-dot" style="background:#23242a"></span><span class="el-name">水</span><br><span class="el-en">STILLNESS</span></td><td>黑、深灰、深蓝</td><td>智慧与沉静</td><td>山海替它做过一万次冥想</td><td>羽调 · 黑色花岗石</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 心境：五形 ============ -->
+<section class="mood">
+  <div class="wrap">
+    <div class="reveal">
+      <p class="kicker">心境 · 造型定口气</p>
+      <h2>看造型，定它的"心境"</h2>
+      <p class="lead" style="margin-top:18px">一块石头同时有几种特征时，按固定顺序判定——孔洞 → 层理 → 斑点 → 棱角 → 圆润，越少见的越优先，圆润兜底。保证每块石头只有一种心境，两个人分的结果一致。</p>
+    </div>
+    <div class="scroll-x reveal" style="margin-top:48px">
+      <table class="element-table">
+        <thead><tr><th>判定顺序</th><th>心境</th><th>判定特征</th><th>意思</th><th>为什么</th></tr></thead>
+        <tbody>
+          <tr><td class="el-en">01</td><td><span class="el-name">孔洞</span><br><span class="el-en">OPEN</span></td><td>有贯穿或明显的凹洞、皱褶</td><td>接纳</td><td>借太湖石"皱、漏、瘦、透"：空处也是它</td></tr>
+          <tr><td class="el-en">02</td><td><span class="el-name">层理</span><br><span class="el-en">LAYERED</span></td><td>能看出一道道平行的纹</td><td>沉淀</td><td>一本地层日记</td></tr>
+          <tr><td class="el-en">03</td><td><span class="el-name">斑点</span><br><span class="el-en">FLAWED, AND FINE</span></td><td>表面有明显杂色点或杂质</td><td>人味</td><td>杂质即人味</td></tr>
+          <tr><td class="el-en">04</td><td><span class="el-name">棱角</span><br><span class="el-en">UNBENT</span></td><td>有没磨圆的边或断面</td><td>决心</td><td>还没向世界妥协的形状</td></tr>
+          <tr><td class="el-en">05</td><td><span class="el-name">圆润</span><br><span class="el-en">AT PEACE</span></td><td>以上都没有，整体光滑圆润</td><td>平和</td><td>河水磨出来的"完成态"</td></tr>
         </tbody>
       </table>
     </div>
@@ -473,9 +537,9 @@
 <section class="persona">
   <div class="wrap">
     <div class="reveal">
-      <p class="kicker">造型是心境 · 25 spirits</p>
-      <h2>5 种颜色 × 5 种造型 = 25 种石精底色</h2>
-      <p class="lead" style="margin-top:18px">每块石头发货前定好人设，人工过目。AI 写人设时以这 25 格为准。</p>
+      <p class="kicker">底色 · 本命 × 心境</p>
+      <h2>5 种本命 × 5 种心境 = 25 种石精底色</h2>
+      <p class="lead" style="margin-top:18px">本命决定石精"信什么"，心境决定它"怎么说"：写每天一句时先按本命选句子，再按心境调口气。AI 写人设时以这 25 格为准，发货前人工过目。</p>
     </div>
     <div class="persona-scroll reveal">
       <div class="persona-grid">
@@ -515,6 +579,73 @@
   </div>
 </section>
 
+<!-- ============ 奇相 & 生辰 ============ -->
+<section class="omen">
+  <div class="wrap">
+    <div class="reveal">
+      <p class="kicker">奇相 · Rare marks</p>
+      <h2>少见的特征，叫"奇相"</h2>
+      <p class="lead" style="margin-top:18px">心境描述整体造型，奇相只标记特别突出的一处——只增加一段故事和一枚图鉴印记。<b style="color:var(--paper)">不分等级，不影响价格，不卖重抽。</b></p>
+    </div>
+    <div class="omen-grid reveal">
+      <div class="omen-card"><h3>天痕<span>女娲补天</span></h3><p>一道明显的白色石英脉——天裂过的地方，补上了。</p></div>
+      <div class="omen-card"><h3>阴阳<span>五色石</span></h3><p>两种颜色各占一半——两种性子住在一块石头里。</p></div>
+      <div class="omen-card"><h3>透漏<span>太湖石</span></h3><p>有一个能透光的孔——光能从你身上穿过去。</p></div>
+      <div class="omen-card"><h3>肖形<span>石燕</span></h3><p>形状像某样东西（心、山、鸟）——它记得自己想变成什么。</p></div>
+      <div class="omen-card"><h3>星斗<span>夜空</span></h3><p>深色底上散落的浅色点——黑里有星。</p></div>
+      <div class="omen-card"><h3>山水<span>一拳千里</span></h3><p>纹路像一幅山水——一块拳头大的石头装得下千山万壑。</p></div>
+    </div>
+    <div class="birth reveal">
+      <h3>生辰</h3>
+      <p>石头第一次被唤醒那天所在的节气，记为它的生辰，例如"生于秋分"。每年生辰那天，女娲说一句提前写好的生辰话；石头记在生辰那周出一回特别篇。对海外用户只提春分、夏至、秋分、冬至附近的生辰。</p>
+    </div>
+    <p class="omen-note reveal">石籍卡上最多印一个奇相，没有就空着。</p>
+  </div>
+</section>
+
+<!-- ============ 示例精石 ============ -->
+<section class="gallery">
+  <div class="wrap">
+    <div class="reveal">
+      <p class="kicker">示例 · Five stones</p>
+      <h2>它们醒来时，各自说的第一句话</h2>
+      <p class="lead" style="margin-top:18px">名字两个字为主，取自雅安的山水地名、颜色的古称、底色的意象；第一句话永远不变。</p>
+    </div>
+    <div class="gallery-grid reveal">
+      <div class="stone-card">
+        <p class="no">No. 00137</p><h3>青衣</h3>
+        <p class="meta"><b class="m-木">木</b> 层理 · 年轮</p>
+        <blockquote>"……好亮。我叫青衣，名字来自我睡了很久的那条江。你是谁？"</blockquote>
+        <p class="guardian">守护典故 · 精卫衔石</p>
+      </div>
+      <div class="stone-card">
+        <p class="no">No. 00212</p><h3>丹崖</h3>
+        <p class="meta"><b class="m-火">火</b> 棱角 · 点火者 · 天痕</p>
+        <blockquote>"……醒了。我叫丹崖，你站我后面就行。你是谁？"</blockquote>
+        <p class="guardian">守护典故 · 石敢当</p>
+      </div>
+      <div class="stone-card">
+        <p class="no">No. 00305</p><h3>缃丘</h3>
+        <p class="meta"><b class="m-土">土</b> 圆润 · 田埂</p>
+        <blockquote>"……别急，先坐下。我叫缃丘，地还在，我也在。你是谁？"</blockquote>
+        <p class="guardian">守护典故 · 石为地骨</p>
+      </div>
+      <div class="stone-card">
+        <p class="no">No. 00418</p><h3>素钟</h3>
+        <p class="meta"><b class="m-金">金</b> 孔洞 · 钟 · 透漏</p>
+        <blockquote>"……有风从我身上穿过去。我叫素钟。你想问什么？"</blockquote>
+        <p class="guardian">守护典故 · 石钟山</p>
+      </div>
+      <div class="stone-card">
+        <p class="no">No. 00506</p><h3>玄星</h3>
+        <p class="meta"><b class="m-水">水</b> 斑点 · 夜空 · 星斗</p>
+        <blockquote>"……嘘。我叫玄星，话少，你慢慢说。你是谁？"</blockquote>
+        <p class="guardian">守护典故 · 石不能言</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ============ 五条信念 ============ -->
 <section class="beliefs">
   <div class="wrap">
@@ -532,16 +663,16 @@
   </div>
 </section>
 
-<!-- ============ 神石谱 ============ -->
+<!-- ============ 神石谱（典故库） ============ -->
 <section class="canon">
   <div class="wrap">
     <div class="reveal">
       <p class="kicker">神石谱 · The Canon</p>
-      <h2>古籍里的 33 块神石，是这块石头的文库</h2>
-      <p class="lead" style="margin-top:18px">每块石头的身世、守护典故和每天一句，都从这份谱里取。每条原文都打开原文页面核对过——引古书只用核对过的原文，不许 AI 自己编。</p>
+      <h2>古籍里的 33 块神石，是这块石头的典故库</h2>
+      <p class="lead" style="margin-top:18px">九类是典故库的九个章节，按故事主题分。每块神石另指定一个本命——石头出厂时，从同本命的典故池里挑一位当它的守护典故。每条原文都打开原文页面核对过，只找到转引的四条如实标注"据转引"。引古书只用核对过的原文，不许 AI 自己编。</p>
     </div>
     <div class="canon-stats reveal">
-      <div class="stat"><b>33</b><span>块神石 · 九类</span></div>
+      <div class="stat"><b>33</b><span>块神石 · 九个章节</span></div>
       <div class="stat"><b>29</b><span>部古籍 · 先秦至清</span></div>
       <div class="stat"><b>150</b><span>首发每日一句 · 五行各 30</span></div>
     </div>
@@ -568,23 +699,23 @@
     </div>
 
     <div class="phase reveal">
-      <div class="phase-label"><b>P0</b><span>首发</span></div>
+      <div class="phase-label"><b>P0</b><span>现在就上</span></div>
       <div class="feat-list">
         <div class="feat"><h4>点化</h4><p>第一次碰，石头醒来。一辈子只有一次，最长 60 秒，可跳过。</p></div>
         <div class="feat"><h4>拍石点精<span class="tag free">免费入口</span></h4><p>拍一张自己捡的石头，30 秒动画看它"醒来"。零库存引流、测传播，每台手机每天限 3 次。</p></div>
         <div class="feat"><h4>今日一谕</h4><p>早上碰一下，3 秒内出现今天的一句话 + 一小段吟诵 + 一行结合你心事的悄悄话。点"为什么"看古籍出处。</p></div>
         <div class="feat"><h4>问精</h4><p>打字问一件事，石精按人设回答，最后一定给一件今天能做的小事。每天最多问 3 次。</p></div>
-        <div class="feat"><h4>石籍卡</h4><p>点化后拿到的身份卡：名字、属性、脾气、来历、第一句话、真的身世、守护典故、编绳人。</p></div>
+        <div class="feat"><h4>石籍卡</h4><p>点化后拿到的身份卡：编号、名字、本命、心境、底色、真身、守护典故、奇相、生辰、编绳人。</p></div>
         <div class="feat"><h4>9:16 分享卡</h4><p>竖版手机尺寸，中间是石头真实照片，配今天那句话和编号，角落标明"AI 辅助生成"。</p></div>
         <div class="feat"><h4>真石之声</h4><p>在河滩录下雅安石头互敲的声音，顺手拍成短视频——冷启动内容，成本近乎为零。</p></div>
       </div>
     </div>
 
     <div class="phase reveal">
-      <div class="phase-label"><b>P1</b><span>首发后</span></div>
+      <div class="phase-label"><b>P1</b><span>第 2 周起</span></div>
       <div class="feat-list">
         <div class="feat"><h4>枕石托梦</h4><p>睡前写一件心事，信封封上"今晚我替你想"，第二天早上 6 点以后才能拆开回信。</p></div>
-        <div class="feat"><h4>石头记</h4><p>每周日一封邮件，像章回小说："第三回：你问要不要走，石头说慢慢拐弯，别跳。"</p></div>
+        <div class="feat"><h4>石头记</h4><p>每周日一封邮件，像章回小说："第三回：你问要不要走，石头说慢慢拐弯，别跳。"生辰那周出特别篇。</p></div>
         <div class="feat"><h4>谕历<span class="tag">待定</span></h4><p>每天那句话排成一本编年史。只记"第几次相见"，断了不提醒、不扣分。</p></div>
         <div class="feat"><h4>刻字木牌</h4><p>木牌刻名字或日期，加 $8，适合送礼。首批可先用手写代替。</p></div>
         <div class="feat"><h4>点精结</h4><p>只卖手编绳和 NFC 木牌，给你自己捡的石头穿上。最轻、最便宜，国际运费最低。</p></div>
@@ -627,7 +758,7 @@
       </div>
       <div class="ethic">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#b03a2e" stroke-width="1.6"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.5-6.5 8-6.5s8 2.5 8 6.5"/></svg>
-        <div><h4>诚实面对用户</h4><p>页面一直标明"你在和 AI 说话"，不扮演恋人。有人流露想伤害自己时停止扮演。只给 18 岁以上的人用（待定）。</p></div>
+        <div><h4>诚实面对用户</h4><p>页面一直标明"你在和 AI 说话"，不扮演恋人。有人流露想伤害自己时停止扮演，给出求助电话（美国 988，国内 12356）。只给 18 岁以上的人用。</p></div>
       </div>
     </div>
   </div>
@@ -664,7 +795,7 @@
       <div class="metric"><b>≥15%</b><h5>免费点化分享率</h5><p>海外 · 30 天</p></div>
       <div class="metric"><b>≥50</b><h5>海外预售单数</h5><p>海外 · 30 天</p></div>
       <div class="metric"><b>≥50</b><h5>国内预售单数</h5><p>国内 · 30 天</p></div>
-      <div class="metric"><b>≥40%</b><h5>第 7 天碰石率</h5><p>国内首批买家</p></div>
+      <div class="metric"><b>第 7 天</b><h5>碰石率</h5><p>国内首批买家留存指标</p></div>
     </div>
     <p class="lead reveal" style="margin-top:26px;font-size:13.5px">两条线都达标，才进入下一阶段。文中成本、价格、转化率均为估算，还没有询价或验证。待讨论：是否从众筹开始。</p>
   </div>
@@ -674,9 +805,9 @@
 <section class="cta" id="cta">
   <div class="wrap cta-inner">
     <div class="reveal">
-      <p class="kicker">The 36,501st</p>
-      <h2>女娲补天剩的那块石头，<br><em>一直在等你。</em></h2>
-      <p class="lead">预售 $29 / ¥69（正式价 $34 / ¥89）。碰一下，叫醒它。</p>
+      <p class="kicker">Fallen Sky · 落天</p>
+      <h2>补在天上的石头，<br><em>落到了你手里。</em></h2>
+      <p class="lead">它替天撑过很久。现在，换它陪你。预售 $29 / ¥69（正式价 $34 / ¥89）。碰一下，叫醒它。</p>
       <a class="btn btn-primary" href="#top">预售开启 · 叫醒我的石头</a>
     </div>
   </div>
