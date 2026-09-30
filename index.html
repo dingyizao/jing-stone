@@ -313,21 +313,51 @@
   footer{background:var(--ink);color:rgba(244,239,228,.4);padding:34px 6vw;border-top:1px solid var(--line-dark);
     display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px;font-family:var(--sans);font-size:12px;letter-spacing:.14em}
 
+  /* 手机端 25 底色：逐条列表 */
+  .persona-list{display:none}
+
   /* ---------- 响应式 ---------- */
   @media (max-width:960px){
     .hero{grid-template-columns:1fr}
-    .hero-visual{min-height:52vh;order:-1}
-    .hero-text{padding:8vh 6vw 14vh}
-    .origin-grid,.awaken-grid,.voices-grid,.market-grid{grid-template-columns:1fr}
+    .hero-visual{min-height:46vh;order:-1}
+    .hero-text{padding:6vh 6vw 12vh}
+    .hero h1{font-size:clamp(34px,10.5vw,52px)}
+    .hero-sub{font-size:15px;margin-bottom:32px}
+    h2{font-size:26px}
+    .lead{font-size:14.5px}
+    .origin,.awaken,.wuxing,.gallery,.canon,.market{padding:72px 0}
+    .compose,.voices,.persona,.omen,.beliefs,.ethics,.roadmap,.cta{padding:72px 0}
+    .origin-grid,.awaken-grid,.voices-grid,.market-grid{grid-template-columns:1fr;gap:40px}
     .compose-grid,.canon-grid,.canon-stats,.omen-grid{grid-template-columns:1fr}
     .feat-list,.ethics-grid{grid-template-columns:1fr}
     .metrics{grid-template-columns:repeat(2,1fr)}
-    .gallery-grid{grid-template-columns:repeat(2,1fr)}
+    .gallery-grid{grid-template-columns:1fr;gap:14px}
     .belief{grid-template-columns:1fr;gap:10px}
-    .persona-grid{grid-template-columns:56px repeat(5,minmax(130px,1fr));}
-    .persona-scroll{overflow-x:auto}
     .birth{flex-direction:column;gap:10px}
     .hero-tag{display:none}
+    /* 卡片瘦身 */
+    .compose-card{padding:30px 24px}
+    .voice{padding:34px 26px}
+    .canon-card{padding:26px 22px}
+    .stone-card{padding:22px 20px}
+    .stone-card blockquote{min-height:0}
+    .omen-card{padding:26px 24px}
+    .feat{padding:20px 22px}
+    .ethic{padding:24px 22px}
+    .stat{padding:24px 22px}
+    .metric{padding:22px 20px}
+    .market-col{padding:32px 26px}
+    .big-char{font-size:clamp(64px,18vw,110px)}
+    /* 25 底色：手机换成列表 */
+    .persona-grid{display:none}
+    .persona-scroll{overflow:visible}
+    .persona-list{display:block;margin-top:40px}
+    .pl-group{font-family:var(--sans);font-size:11px;letter-spacing:.3em;color:var(--gold);padding:22px 0 4px}
+    .pl-item{display:flex;gap:14px;padding:12px 0;border-top:1px solid var(--line);align-items:baseline}
+    .pl-item .mood{min-width:56px;font-family:var(--sans);font-size:11px;letter-spacing:.14em;color:var(--mist)}
+    .pl-item .txt{flex:1;font-size:14px}
+    .pl-item .txt b{margin-right:8px}
+    .pl-item .txt i{font-style:normal;color:var(--mist);font-size:12.5px}
   }
   @media (prefers-reduced-motion:reduce){
     *,*::before,*::after{animation-duration:.01ms !important;transition-duration:.01ms !important;scroll-behavior:auto}
@@ -348,7 +378,7 @@
     <p class="hero-eyebrow">JING · FALLEN SKY 落天 · 首发系列</p>
     <h1>手机<em>碰一下</em>，<br>石头里的精就醒了。</h1>
     <p class="hero-en">Every stone has a jing. Tap to wake it.</p>
-    <p class="hero-sub">一块雅安河石，经过三道手工，配一枚藏着 NFC 芯片的木牌。它是<b>可戴的水晶 × 可抽的神谕卡 × 护身符项链</b>，叠成一块会说话的守护石——传说里，它是从补天的漏处落下来的石头，醒来之后，每天跟你说一句话。</p>
+    <p class="hero-sub">一块雅安河石，三道手工，一枚藏着 NFC 芯片的木牌。它是能戴出门的护身符，也是每天一句话的神谕卡——传说里，它是从补天的漏处落下来的石头。碰一下，它就醒了，以后每天跟你说一句话。</p>
     <div class="hero-actions">
       <a class="btn btn-primary" href="#cta">叫醒属于我的那块</a>
       <a class="btn btn-ghost" href="#origin">什么是落天石</a>
@@ -539,7 +569,7 @@
     <div class="reveal">
       <p class="kicker">底色 · 本命 × 心境</p>
       <h2>5 种本命 × 5 种心境 = 25 种石精底色</h2>
-      <p class="lead" style="margin-top:18px">本命决定石精"信什么"，心境决定它"怎么说"：写每天一句时先按本命选句子，再按心境调口气。AI 写人设时以这 25 格为准，发货前人工过目。</p>
+      <p class="lead" style="margin-top:18px">本命管"信什么"，心境管"怎么说"。每天那句，先按本命挑句子，再按心境调口气。每一位的人设，发货前都有人看过一遍。</p>
     </div>
     <div class="persona-scroll reveal">
       <div class="persona-grid">
@@ -669,7 +699,7 @@
     <div class="reveal">
       <p class="kicker">神石谱 · The Canon</p>
       <h2>古籍里的 33 块神石，是这块石头的典故库</h2>
-      <p class="lead" style="margin-top:18px">九类是典故库的九个章节，按故事主题分。每块神石另指定一个本命——石头出厂时，从同本命的典故池里挑一位当它的守护典故。每条原文都打开原文页面核对过，只找到转引的四条如实标注"据转引"。引古书只用核对过的原文，不许 AI 自己编。</p>
+      <p class="lead" style="margin-top:18px">九类是按故事主题分的九个章节。每块神石都归了一个本命——你的石头出厂时，就从同本命的那几位里挑一位当守护典故。每条原文都逐字核对过，只找到转引的，老老实实标了"据转引"。</p>
     </div>
     <div class="canon-stats reveal">
       <div class="stat"><b>33</b><span>块神石 · 九个章节</span></div>
@@ -843,6 +873,35 @@
     });
   }, {threshold: 0.12, rootMargin: '0px 0px -8% 0px'});
   els.forEach(function(el){ io.observe(el); });
+})();
+</script>
+
+<script>
+// 手机端：把 25 底色网格转成逐条列表
+(function(){
+  if (!window.matchMedia('(max-width: 960px)').matches) return;
+  var grid = document.querySelector('.persona-grid');
+  if (!grid) return;
+  var heads = [];
+  grid.querySelectorAll('.head').forEach(function(h){ heads.push(h.textContent.trim()); });
+  var html = '';
+  var cur = '';
+  Array.prototype.forEach.call(grid.children, function(cell, idx){
+    if (cell.classList.contains('row-head')) {
+      cur = cell.textContent.trim();
+      html += '<p class="pl-group">' + cur + ' 系</p>';
+    } else if (cell.classList.contains('cell')) {
+      var col = (idx % 6) - 1;
+      var mood = heads[col] ? heads[col].split(' ')[0] : '';
+      var b = cell.querySelector('b') ? cell.querySelector('b').textContent.trim() : '';
+      var i = cell.querySelector('i') ? cell.querySelector('i').textContent.trim() : '';
+      html += '<div class="pl-item"><span class="mood">' + mood + '</span><span class="txt"><b>' + b + '</b><i>' + i + '</i></span></div>';
+    }
+  });
+  var list = document.createElement('div');
+  list.className = 'persona-list';
+  list.innerHTML = html;
+  grid.parentNode.appendChild(list);
 })();
 </script>
 </body>
